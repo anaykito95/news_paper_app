@@ -15,10 +15,11 @@ class AppTheme {
   AppTheme._();
 
   static final ThemeData lightTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.grey,
+    scaffoldBackgroundColor: Colors.white,
     fontFamily: 'Lato',
     appBarTheme: AppBarTheme(
       color: Colors.white,
+      elevation: 0,
       iconTheme: IconThemeData(
         color: Colors.black87,
       ),
@@ -40,10 +41,11 @@ class AppTheme {
   );
 
   static final ThemeData darkTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.grey,
+    scaffoldBackgroundColor: Colors.black87,
     fontFamily: 'Lato',
     appBarTheme: AppBarTheme(
       color: Colors.black,
+      elevation: 0,
       iconTheme: IconThemeData(
         color: Colors.white,
       ),
