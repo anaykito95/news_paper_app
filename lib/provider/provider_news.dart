@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:news_paper/base.dart';
+import 'package:news_paper/newspaper/base.dart';
 
 class Notice with ChangeNotifier {
   final String id;
@@ -8,8 +8,32 @@ class Notice with ChangeNotifier {
   final String summary;
   final String imageUrl;
   final String url;
+  NewspaperBase newspaperBase;
+  String html;
 
-  Notice({this.section, this.id, this.url, this.title, this.summary, this.imageUrl});
+  Notice(
+      {this.section,
+      this.id,
+      this.url,
+      this.html,
+      this.title,
+      this.newspaperBase,
+      this.summary,
+      this.imageUrl});
+
+  synchronize(BuildContext context) async {
+    Notice data = await newspaperBase.fetchNoticeData(url);
+    this.html = data?.html;
+    notifyListeners();
+  }
+}
+
+class Section with ChangeNotifier {
+  final String id;
+  final String name;
+  final String url;
+
+  Section({this.id, this.name, this.url});
 }
 
 class ProviderNotices with ChangeNotifier {

@@ -1,7 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:news_paper/provider/provider_news.dart';
+import 'package:news_paper/ui/widget/notice_grid_item.dart';
 import 'package:provider/provider.dart';
 
 class NewspaperDetail extends StatefulWidget {
@@ -13,12 +15,8 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(
-        Duration(milliseconds: 100),
-        () => Provider.of<ProviderNotices>(
-              context,
-              listen: false,
-            ).synchronize(context));
+    Future.delayed(Duration(milliseconds: 100),
+        () => Provider.of<ProviderNotices>(context, listen: false).synchronize(context));
   }
 
   @override
@@ -28,12 +26,52 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            title: Text(notices.newspaperBase.title),
             floating: true,
-            flexibleSpace: Container(
-              color: Theme.of(context).cardColor,
+            pinned: true,
+            iconTheme: IconThemeData(color: notices.newspaperBase.actionColor),
+            backgroundColor: notices.newspaperBase.bannerColor,
+            actionsIconTheme: IconThemeData(color: notices.newspaperBase.actionColor),
+            actions: <Widget>[
+              IconButton(icon: Icon(Icons.loop), onPressed: () => notices.synchronize(context))
+            ],
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios, color: notices.newspaperBase.actionColor),
+              onPressed: () => Navigator.of(context).pop(),
             ),
-//            expandedHeight: 200,
+            flexibleSpace: FlexibleSpaceBar(
+              collapseMode: CollapseMode.parallax,
+              background: Padding(
+                padding: const EdgeInsets.only(bottom: 60),
+                child: Image.asset(
+                  'assets/images/${notices.newspaperBase.assetBannerName}',
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.bottomCenter,
+                ),
+              ),
+            ),
+            expandedHeight: (MediaQuery.of(context).size.height * 0.15) + 60,
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(60),
+              child: Container(
+                height: 60,
+                color: Colors.black45,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: notices.newspaperBase.sections.length,
+                  itemBuilder: (context, i) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Chip(
+                      elevation: 5,
+                      label: Text(
+                        notices.newspaperBase.sections[i].name,
+                        style: TextStyle(color: notices.newspaperBase.actionColor),
+                      ),
+                      backgroundColor: notices.newspaperBase.color,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
           SliverLayoutBuilder(
             builder: (context, constraints) => notices.notices == null
@@ -73,89 +111,6 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
                       )),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class NoticeGridItem extends StatelessWidget {
-  final Notice notice;
-
-  const NoticeGridItem({Key key, this.notice}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      elevation: 5,
-      clipBehavior: Clip.hardEdge,
-      child: GridTile(
-        child: InkWell(
-//          onTap: () {
-//            Navigator.of(context).push(
-//              PageRouteBuilder(
-//                transitionDuration: Duration(milliseconds: 400),
-//                pageBuilder: (_, __, ___) => ChangeNotifierProvider.value(
-//                    value: audiovisual,
-//                    child: AudiovisualDetail(
-//                      trending: true,
-//                    )),
-//              ),
-//            );
-//          },
-          splashColor: Colors.white,
-          child: Hero(
-            tag: notice.id ?? notice.url.substring(notice.url.lastIndexOf('/')),
-            child: Material(
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    flex: 3,
-                    child: notice.imageUrl == null
-                        ? Container(
-                            color: Colors.black12,
-                            child: Center(child: Icon(FontAwesomeIcons.solidNewspaper)))
-                        : CachedNetworkImage(
-                            imageUrl: notice.imageUrl,
-                            placeholder: (_, __) => Container(
-                                color: Colors.black12,
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                )),
-                            errorWidget: (ctx, _, __) => Container(
-                                color: Colors.black12,
-                                child: Center(
-                                  child: Icon(FontAwesomeIcons.solidNewspaper),
-                                )),
-                            fit: BoxFit.cover,
-                            height: double.infinity,
-                            width: double.infinity,
-                          ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                        color: Theme.of(context).cardColor,
-                        child: ListTile(
-                          title: Text(
-                            notice.title,
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                          ),
-                          subtitle: Text(
-                            notice.summary,
-                            maxLines: 3,
-                            overflow: TextOverflow.fade,
-                            textAlign: TextAlign.center,
-                          ),
-                        )),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
