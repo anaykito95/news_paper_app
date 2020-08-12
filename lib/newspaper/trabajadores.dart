@@ -32,9 +32,13 @@ class Trabajadores extends NewspaperBase {
       final elements = document.getElementsByTagName('article');
       elements.forEach((element) {
         try {
+          final url = element.getElementsByClassName('post-thumbnail')?.first?.attributes['href'];
+          final h2TagList = element.getElementsByTagName('h2');
+          final h3TagList = element.getElementsByTagName('h3');
           final notice = Notice(
-            url: element.getElementsByClassName('post-thumbnail')?.first?.attributes['href'],
-            title: element.getElementsByTagName('h2')?.first?.text ?? '',
+            url: url,
+            title: h2TagList.isNotEmpty ? h2TagList?.first?.text
+                : h3TagList.isNotEmpty ? h3TagList?.first?.text : '',
             newspaperBase: this,
 //            summary: element.getElementsByTagName('p')?.first?.text,
             imageUrl: element
@@ -58,8 +62,7 @@ class Trabajadores extends NewspaperBase {
   @override
   Future<Notice> parseSingleNotice(dom.Document document) async {
     try {
-      final notice =
-          Notice(html: document.getElementsByTagName('article')?.first?.outerHtml);
+      final notice = Notice(html: document.getElementsByTagName('article')?.first?.outerHtml);
       return notice;
     } catch (e) {
       print(e);

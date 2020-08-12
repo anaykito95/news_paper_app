@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:news_paper/provider/provider_news.dart';
+import 'package:news_paper/ui/screen/section_detail.dart';
 import 'package:news_paper/ui/widget/notice_grid_item.dart';
+import 'package:news_paper/ui/widget/placeholder.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewspaperDetail extends StatefulWidget {
   @override
@@ -16,7 +19,7 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
   void initState() {
     super.initState();
     Future.delayed(Duration(milliseconds: 100),
-        () => Provider.of<ProviderNotices>(context, listen: false).synchronize(context));
+        () => Provider.of<ProviderNotices>(context, listen: false).synchronize());
   }
 
   @override
@@ -32,7 +35,8 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
             backgroundColor: notices.newspaperBase.bannerColor,
             actionsIconTheme: IconThemeData(color: notices.newspaperBase.actionColor),
             actions: <Widget>[
-              IconButton(icon: Icon(Icons.loop), onPressed: () => notices.synchronize(context))
+              IconButton(icon: Icon(Icons.web), onPressed: () => launch(notices.newspaperBase.baseUrl)),
+              IconButton(icon: Icon(Icons.loop), onPressed: () => notices.synchronize(useCache: false))
             ],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios, color: notices.newspaperBase.actionColor),
@@ -60,13 +64,28 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
                   itemCount: notices.newspaperBase.sections.length,
                   itemBuilder: (context, i) => Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Chip(
-                      elevation: 5,
-                      label: Text(
-                        notices.newspaperBase.sections[i].name,
-                        style: TextStyle(color: notices.newspaperBase.actionColor),
+                    child: ChangeNotifierProvider.value(
+                      value: notices.newspaperBase.sections[i],
+                      child: Consumer<Section>(
+                        builder: (context, section, child) => GestureDetector(
+                          onTap: section.url == null
+                              ? null
+                              : () => Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => SectionDetail(
+                                        section: section,
+                                        base: notices.newspaperBase,
+                                      ))),
+                          child: Chip(
+                            elevation: 5,
+                            label: Text(
+                              section.name,
+                              style: TextStyle(color: notices.newspaperBase.actionColor),
+                            ),
+                            backgroundColor:
+                                section.enable ? notices.newspaperBase.color : Colors.grey,
+                          ),
+                        ),
                       ),
-                      backgroundColor: notices.newspaperBase.color,
                     ),
                   ),
                 ),
@@ -76,15 +95,15 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
           SliverLayoutBuilder(
             builder: (context, constraints) => notices.notices == null
                 ? SliverFillRemaining(
-                    child: Center(child: CircularProgressIndicator()),
+                    child: ShimmerPlaceholder(),
                   )
                 : notices.notices.length > 0
                     ? SliverPadding(
                         padding: const EdgeInsets.all(10.0),
                         sliver: SliverGrid(
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 3 / 5,
+                              crossAxisCount: 1,
+                              childAspectRatio: 7 / 5,
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 10),
                           delegate: SliverChildBuilderDelegate(
@@ -103,7 +122,7 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
                           children: <Widget>[
                             Text('Sin noticias que mostrar'),
                             FloatingActionButton(
-                              onPressed: () => notices.synchronize(context),
+                              onPressed: () => notices.synchronize(useCache: false),
                               child: Icon(FontAwesomeIcons.newspaper),
                             )
                           ],

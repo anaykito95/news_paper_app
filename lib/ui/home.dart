@@ -8,34 +8,37 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: MediaQuery.of(context).padding.copyWith(left: 0, right: 0, bottom: 0),
-      color: Colors.grey,
+      color: Colors.white,
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            'Noticias',
-            style: Theme.of(context).textTheme.headline4.copyWith(color: Colors.white),
+            'Periodicos de Cuba',
+            style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black87),
           ),
-          backgroundColor: Colors.black45,
+          backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Colors.white),
         ),
-        drawer: Drawer(),
+//        drawer: Drawer(),
+        bottomNavigationBar: BottomAppBar(
+//        color: Colors.black26,
+          elevation: 0,
+          child: ListTile(
+            subtitle: Text(
+              'Ing. Andrés Forns Jusino',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            title: Text(
+              'Desarrollador',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
+          ),
+        ),
         body: Column(
           children: <Widget>[
-//            ListTile(
-//              title: Text(
-//                'Periodicos de Cuba',
-//                textAlign: TextAlign.center,
-//                style: Theme.of(context).textTheme.headline4,
-//              ),
-//              trailing: Switch(
-//                value: Provider.of<AppStateNotifier>(context, listen: false).isDarkMode,
-//                onChanged: (boolVal) {
-//                  Provider.of<AppStateNotifier>(context, listen: false).updateTheme(boolVal);
-//                },
-//              ),
-//            ),
-            Expanded(child: Container(color: Colors.black12, child: NewsPaperList())),
+            Expanded(child: Container(child: NewsPaperList())),
           ],
         ),
       ),

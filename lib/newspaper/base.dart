@@ -23,17 +23,17 @@ abstract class NewspaperBase {
 
   final Map<String, List<Notice>> _cache = Map();
 
-  Future<List<Notice>> synchronizeNotices() async {
-    if (_cache.containsKey(baseUrl) && _cache[baseUrl].isNotEmpty) {
-      return _cache[baseUrl];
+  Future<List<Notice>> synchronizeNotices({String url, bool cache}) async {
+    if (cache ?? true && _cache.containsKey(url ?? baseUrl) && _cache[url ?? baseUrl].isNotEmpty) {
+      return _cache[url ?? baseUrl];
     }
     List<Notice> list = [];
     try {
-      http.Response response = await http.get(baseUrl);
+      http.Response response = await http.get(url ?? baseUrl);
       dom.Document document = parser.parse(response.body);
       list = await parseNewsFromDocument(document);
       if (list.isNotEmpty) {
-        _cache.putIfAbsent(baseUrl, () => list);
+        _cache.putIfAbsent(url ?? baseUrl, () => list);
       }
     } catch (e) {
       print(e);

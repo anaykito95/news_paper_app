@@ -13,10 +13,14 @@ class NoticeGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       elevation: 5,
       clipBehavior: Clip.hardEdge,
       child: GridTile(
+        footer: GridTileBar(
+          backgroundColor: Colors.black45,
+          title: Text(notice.title, maxLines: 3,),
+        ),
         child: InkWell(
           onTap: () {
             Navigator.of(context).push(
@@ -28,51 +32,27 @@ class NoticeGridItem extends StatelessWidget {
             );
           },
           splashColor: Colors.white,
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                flex: 3,
-                child: notice.imageUrl == null
-                    ? Container(
+          child: Container(
+            child: notice.imageUrl == null
+                ? Container(
+                    color: Colors.black12,
+                    child: Center(child: Icon(FontAwesomeIcons.solidNewspaper)))
+                : CachedNetworkImage(
+                    imageUrl: notice.imageUrl,
+                    placeholder: (_, __) => Container(
                         color: Colors.black12,
-                        child: Center(child: Icon(FontAwesomeIcons.solidNewspaper)))
-                    : CachedNetworkImage(
-                        imageUrl: notice.imageUrl,
-                        placeholder: (_, __) => Container(
-                            color: Colors.black12,
-                            child: Center(
-                              child: CircularProgressIndicator(),
-                            )),
-                        errorWidget: (ctx, _, __) => Container(
-                            color: Colors.black12,
-                            child: Center(
-                              child: Icon(FontAwesomeIcons.solidNewspaper),
-                            )),
-                        fit: BoxFit.cover,
-                        height: double.infinity,
-                        width: double.infinity,
-                      ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                    color: Theme.of(context).cardColor,
-                    child: ListTile(
-                      title: Text(
-                        notice.title ?? '-',
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                      ),
-//                      subtitle: Text(
-//                        notice.summary ?? '-',
-//                        maxLines: 3,
-//                        overflow: TextOverflow.fade,
-//                        textAlign: TextAlign.center,
-//                      ),
-                    )),
-              )
-            ],
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        )),
+                    errorWidget: (ctx, _, __) => Container(
+                        color: Colors.black12,
+                        child: Center(
+                          child: Icon(FontAwesomeIcons.solidNewspaper),
+                        )),
+                    fit: BoxFit.cover,
+                    height: double.infinity,
+                    width: double.infinity,
+                  ),
           ),
         ),
       ),

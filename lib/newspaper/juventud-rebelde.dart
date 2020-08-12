@@ -69,10 +69,7 @@ class JuventudRebelde extends NewspaperBase {
     Section(name: 'Cuba', url: '$baseUrl/cuba', id: '$baseUrl/cuba'),
     Section(name: 'Internacionales', url: '$baseUrl/internacionales', id: '$baseUrl/inter'),
     Section(name: 'Ciencia y Técnica', url: '$baseUrl/ciencia-tecnica', id: '$baseUrl/ciencia'),
-    Section(name: 'Opinión', url: '$baseUrl/opinion', id: '$baseUrl/opinion'),
     Section(name: 'Cultura', url: '$baseUrl/cultura', id: '$baseUrl/cultura'),
     Section(name: 'Deporte', url: '$baseUrl/deporte', id: '$baseUrl/deporte'),
-    Section(name: 'Cultura', url: '$baseUrl/cultura', id: '$baseUrl/cultura'),
-    Section(name: 'Suplementos', url: '$baseUrl/suplementos', id: '$baseUrl/suplementos')
   ];
 }

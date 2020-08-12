@@ -32,8 +32,19 @@ class Section with ChangeNotifier {
   final String id;
   final String name;
   final String url;
+  bool enable = true;
 
   Section({this.id, this.name, this.url});
+
+  toggleEnable() {
+    enable = !enable;
+    notifyListeners();
+  }
+
+  disable() {
+    enable = false;
+    notifyListeners();
+  }
 }
 
 class ProviderNotices with ChangeNotifier {
@@ -46,8 +57,13 @@ class ProviderNotices with ChangeNotifier {
     this.newspaperBase = newspaperBase;
   }
 
-  synchronize(BuildContext context) async {
-    _notices = await newspaperBase.synchronizeNotices();
+  synchronize({bool useCache}) async {
+    _notices = await newspaperBase.synchronizeNotices(cache: useCache);
+    newspaperBase.sections.forEach((section) => section.enable = true);
     notifyListeners();
+  }
+
+  disableAllSections() {
+    newspaperBase.sections.forEach((section) => section.disable());
   }
 }

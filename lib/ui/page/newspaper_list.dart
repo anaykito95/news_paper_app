@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:news_paper/newspaper/base.dart';
 import 'package:news_paper/newspaper/granma.dart';
@@ -12,7 +14,11 @@ class NewsPaperList extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GridView(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, childAspectRatio: 1 / 1, crossAxisSpacing: 10, mainAxisSpacing: 10),
+          crossAxisCount: 1,
+          childAspectRatio: 2 / 1,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+        ),
         children: <Widget>[
           NewsPaperListItem(newspaper: JuventudRebelde()),
           NewsPaperListItem(newspaper: Granma()),
@@ -49,11 +55,13 @@ class NewsPaperListItem extends StatelessWidget {
         elevation: 10,
         child: circle ?? false
             ? Container(
-                decoration: new BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: new DecorationImage(
-                        fit: BoxFit.fill,
-                        image: AssetImage('assets/images/${newspaper.assetIconName}'))))
+                height: 200,
+                margin: const EdgeInsets.all(10),
+                alignment: Alignment.center,
+                child: CircleAvatar(
+                  radius: 100,
+                    backgroundImage: AssetImage('assets/images/${newspaper.assetIconName}')),
+              )
             : Container(
                 height: 200,
                 margin: const EdgeInsets.all(10),
@@ -61,6 +69,20 @@ class NewsPaperListItem extends StatelessWidget {
                 child: Image.asset('assets/images/${newspaper.assetIconName}'),
               ),
       ),
+    );
+  }
+
+  Widget _buildCircleAvatar() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final radius = min(constraints.maxHeight / 4, constraints.maxWidth / 4);
+        return Center(
+          child: CircleAvatar(
+            radius: radius,
+            backgroundImage: AssetImage('assets/images/${newspaper.assetIconName}')
+          ),
+        );
+      },
     );
   }
 }
