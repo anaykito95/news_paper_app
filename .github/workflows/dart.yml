@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ master ]
+    branches: [ develop ]
 name: Build and Release apk
 jobs:
   build-apk:
