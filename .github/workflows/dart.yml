@@ -1,7 +1,8 @@
 on:
   push:
-    tags:
-      - "*"
+    branches: [ master ]
+      pull_request:
+        branches: [ master ]
 name: Build and Release apk
 jobs:
   build:
