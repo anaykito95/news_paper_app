@@ -10,6 +10,9 @@ import 'package:news_paper/ui/widget/placeholder.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../util.dart';
 
 class NoticeDetail extends StatefulWidget {
   @override
@@ -23,20 +26,12 @@ class PopupTextScale {
   PopupTextScale(this.label, this.value);
 }
 
-class _NoticeDetailState extends State<NoticeDetail> {
+class _NoticeDetailState extends State<NoticeDetail> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration(milliseconds: 100),
         () => Provider.of<Notice>(context, listen: false).synchronize(context));
-  }
-
-  final _stream = StreamController<double>.broadcast();
-
-  @override
-  void dispose() {
-    super.dispose();
-    _stream.close();
   }
 
   @override
@@ -57,82 +52,50 @@ class _NoticeDetailState extends State<NoticeDetail> {
             icon: Icon(Icons.format_size),
             onPressed: () => showModalBottomSheet(
               context: context,
-              backgroundColor: notice.newspaperBase.color,
               builder: (context) => Container(
-                height: 80,
-                child: ListTile(
-//                  title: Text('Tamaño del texto'),
-//                  trailing: Icon(FontAwesomeIcons.font),
-                  title: StreamBuilder<double>(
-                      stream: _stream.stream,
-                      initialData: MediaQuery.of(context).textScaleFactor,
-                      builder: (context, snapshot) {
-                        return Slider(
-                          value: snapshot.data,
-                          onChanged: (value) => null,
-                          activeColor: notice.newspaperBase.actionColor,
-                          inactiveColor: Colors.grey,
-                          onChangeEnd: (value) => _stream.add(value),
-                          min: 0.8,
-                          max: 2.0,
-                        );
-                      }),
+                height: 60,
+                color: Colors.white,
+                child: ChangeNotifierProvider.value(
+                  value: notice,
+                  child: Consumer<Notice>(
+                    builder: (context, provider, child) => Slider(
+                      value: provider.textScaleFactor,
+                      activeColor: Colors.black87,
+                      inactiveColor: Colors.grey,
+                      onChanged: (value) => provider.changeTextScaleFactor(value),
+                      min: 0.8,
+                      max: 2.0,
+                    ),
+                  ),
                 ),
               ),
             ),
           )
-//          StreamBuilder<double>(
-//              stream: _stream.stream,
-//              initialData: MediaQuery.of(context).textScaleFactor,
-//              builder: (context, snapshot) {
-//                return PopupMenuButton<PopupTextScale>(
-//                  icon: Icon(Icons.format_size),
-//                  onSelected: (value) => _stream.add(value.value),
-//                  itemBuilder: (context) => [
-//                    PopupTextScale('Normal', 1.0),
-//                    PopupTextScale('Medio', 1.2),
-//                    PopupTextScale('Grande', 1.5),
-//                    PopupTextScale('Muy Grande', 1.8)
-//                  ].map((e) {
-//                    return PopupMenuItem(
-//                        value: e,
-//                        child: Text(
-//                          e.label,
-//                          style: TextStyle(
-//                              fontWeight:
-//                                  e.value == snapshot.data ? FontWeight.bold : FontWeight.normal,
-//                              color: e.value == snapshot.data ? Colors.black87 : Colors.grey),
-//                        ));
-//                  }).toList(),
-//                );
-//              }),
         ],
         backgroundColor: notice.newspaperBase.color,
         elevation: 5,
         iconTheme: IconThemeData(color: notice.newspaperBase.actionColor),
       ),
       body: Container(
-        color: Colors.black12.withOpacity(0.04),
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        color: Colors.white,
+//        padding: notice.html == null ? const EdgeInsets.symmetric(horizontal: 10) : null,
         child: notice.html != null
-            ? StreamBuilder<double>(
-                stream: _stream.stream,
-                initialData: MediaQuery.of(context).textScaleFactor,
-                builder: (context, snapshot) {
-                  return MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaleFactor: snapshot.data),
-                    child: SafeArea(
-                      child: Markdown(
-                        data: html2md.convert(notice.html),
-                        imageDirectory: notice.newspaperBase.baseUrl,
-                        builders: {
-                          'h6': CenteredHeaderBuilder(),
-                          'sub': SubscriptBuilder(),
-                        },
-                      ),
-                    ),
-                  );
-                })
+            ? MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaleFactor: notice.textScaleFactor),
+                child: SafeArea(
+                  top: false,
+                  child: Markdown(
+                    data: html2md.convert(notice.html),
+                    imageDirectory: notice.newspaperBase.baseUrl,
+//                    padding: const EdgeInsets.all(0),
+                    onTapLink: (href) => launch(href),
+                    builders: {
+                      'h6': CenteredHeaderBuilder(),
+                      'sub': SubscriptBuilder(),
+                    },
+                  ),
+                ),
+              )
             : ShimmerPlaceholder(),
       ),
     );

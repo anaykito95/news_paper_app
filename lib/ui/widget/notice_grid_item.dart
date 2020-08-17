@@ -17,9 +17,14 @@ class NoticeGridItem extends StatelessWidget {
       elevation: 5,
       clipBehavior: Clip.hardEdge,
       child: GridTile(
-        footer: GridTileBar(
-          backgroundColor: Colors.black45,
-          title: Text(notice.title, maxLines: 3,),
+        footer: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            '${notice.title}',
+            maxLines: 3,
+            style: TextStyle(color: Colors.black87),
+          ),
         ),
         child: InkWell(
           onTap: () {

@@ -15,6 +15,10 @@ class SectionDetail extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(section.name),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: FutureBuilder<List<Notice>>(
         future: loadData(),

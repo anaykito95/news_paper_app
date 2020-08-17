@@ -10,6 +10,9 @@ class Notice with ChangeNotifier {
   final String url;
   NewspaperBase newspaperBase;
   String html;
+  double _textScaleFactor;
+
+  double get textScaleFactor => _textScaleFactor ?? 1.0;
 
   Notice(
       {this.section,
@@ -24,6 +27,12 @@ class Notice with ChangeNotifier {
   synchronize(BuildContext context) async {
     Notice data = await newspaperBase.fetchNoticeData(url);
     this.html = data?.html;
+    this._textScaleFactor = _textScaleFactor ?? MediaQuery.of(context).textScaleFactor;
+    notifyListeners();
+  }
+
+  changeTextScaleFactor(double newScale) {
+    this._textScaleFactor = newScale;
     notifyListeners();
   }
 }

@@ -38,6 +38,7 @@ dependencies:
   share: ^0.6.4+3
   html2md: ^0.5.1
   flutter_markdown: ^0.4.3
+  package_info: ^0.4.1
 
 dev_dependencies:
   flutter_test:
