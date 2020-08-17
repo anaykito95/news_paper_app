@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ develop ]
+    branches: [ master ]
 name: Build and Release apk
 jobs:
   build-apk:
@@ -22,5 +22,5 @@ jobs:
 #    steps:
       - uses: actions/upload-artifact@v1
         with:
-          name: app-release.apk
+          name: Periodicos Cubanos.apk
           path: build/app/outputs/apk/release/app-release.apk
