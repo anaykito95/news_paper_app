@@ -16,12 +16,11 @@ jobs:
           channel: "stable"
       - run: flutter pub get
       - run: flutter build apk --release --target-platform android-arm
-  release-artifact:
-    needs: build-apk
-    runs-on: ubuntu-latest
-    steps:
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v1
+#  release-artifact:
+#    needs: build-apk
+#    runs-on: ubuntu-latest
+#    steps:
+      - uses: actions/upload-artifact@v1
         with:
           name: app-release.apk
-          path: build\app\outputs\apk\release\app-release.apk
+          path: build/app/outputs/apk/release/app-release.apk
