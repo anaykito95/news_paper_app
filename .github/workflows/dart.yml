@@ -1,6 +1,8 @@
 on:
   push:
-    branches: [ master ]
+    branches: [ master, develop ]
+    tags:
+    - 'v*'
 name: Build and Release apk
 jobs:
   build-apk:
@@ -15,20 +17,9 @@ jobs:
         with:
           channel: "stable"
       - run: flutter pub get
-      - run: flutter build apk --release --target-platform android-arm
-#  release-artifact:
-#    needs: build-apk
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/upload-artifact@v1
-#        with:
-#          name: app-release.apk
-#          path: build/app/outputs/apk/release/app-release.apk
-      - uses: underwindfall/create-release-with-debugapk@v2.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            tag_name: master
-            asset_path: build/app/outputs/apk/release/app-release.apk
-            asset_name: Periodiscos.apk
-            asset_content_type: application/zip
+      - run: flutter build apk --release --split-per-abi
+      - name: Create a Release APK
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/app/outputs/apk/release/*.apk"
+          token: ${{ secrets.TOKEN }}
