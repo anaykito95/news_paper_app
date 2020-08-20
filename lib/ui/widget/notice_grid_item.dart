@@ -12,18 +12,19 @@ class NoticeGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      elevation: 5,
-      clipBehavior: Clip.hardEdge,
+    return Container(
+//      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+//      elevation: 5,
+//      clipBehavior: Clip.hardEdge,
       child: GridTile(
         footer: Container(
-          color: Colors.white,
-          padding: const EdgeInsets.all(8.0),
+          color: Colors.white70,
+          padding: const EdgeInsets.all(10),
           child: Text(
             '${notice.title}',
             maxLines: 3,
-            style: TextStyle(color: Colors.black87),
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black87),
           ),
         ),
         child: InkWell(
@@ -41,7 +42,9 @@ class NoticeGridItem extends StatelessWidget {
             child: notice.imageUrl == null
                 ? Container(
                     color: Colors.black12,
-                    child: Center(child: Icon(FontAwesomeIcons.solidNewspaper)))
+                    child: Image.asset(
+                      'assets/images/notice_placeholder.png',
+                    ))
                 : CachedNetworkImage(
                     imageUrl: notice.imageUrl,
                     placeholder: (_, __) => Container(

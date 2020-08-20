@@ -17,10 +17,10 @@ class Trabajadores extends NewspaperBase {
   Color get color => Color(0xffF17B00);
 
   @override
-  Color get bannerColor => Colors.white;
+  Color get bannerColor => Color(0xffF17B00);
 
   @override
-  Color get actionColor => Colors.black87;
+  Color get actionColor => Colors.white;
 
   @override
   String get title => 'Trabajadores';

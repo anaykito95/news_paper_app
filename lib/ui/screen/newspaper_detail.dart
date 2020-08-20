@@ -31,12 +31,19 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
           SliverAppBar(
             floating: true,
             pinned: true,
+            title: Text(
+              notices.newspaperBase.title,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(color: notices.newspaperBase.actionColor),
+            ),
             iconTheme: IconThemeData(color: notices.newspaperBase.actionColor),
             backgroundColor: notices.newspaperBase.bannerColor,
             actionsIconTheme: IconThemeData(color: notices.newspaperBase.actionColor),
             actions: <Widget>[
-              IconButton(icon: Icon(Icons.web), onPressed: () => launch(notices.newspaperBase.baseUrl)),
-              IconButton(icon: Icon(Icons.loop), onPressed: () => notices.synchronize(useCache: false))
+              IconButton(
+                  icon: Icon(Icons.web), onPressed: () => launch(notices.newspaperBase.baseUrl)),
+              IconButton(
+                  icon: Icon(Icons.loop), onPressed: () => notices.synchronize(useCache: false))
             ],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios, color: notices.newspaperBase.actionColor),
@@ -46,14 +53,14 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
               collapseMode: CollapseMode.parallax,
               background: Padding(
                 padding: const EdgeInsets.only(bottom: 60),
-                child: Image.asset(
-                  'assets/images/${notices.newspaperBase.assetBannerName}',
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.bottomCenter,
-                ),
+//                child: Image.asset(
+//                  'assets/images/${notices.newspaperBase.assetBannerName}',
+//                  fit: BoxFit.scaleDown,
+//                  alignment: Alignment.bottomCenter,
+//                ),
               ),
             ),
-            expandedHeight: (MediaQuery.of(context).size.height * 0.15) + 60,
+//            expandedHeight: (MediaQuery.of(context).size.height * 0.15) + 60,
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(60),
               child: Container(
@@ -99,11 +106,11 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
                   )
                 : notices.notices.length > 0
                     ? SliverPadding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.all(0),
                         sliver: SliverGrid(
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 1,
-                              childAspectRatio: 7 / 5,
+                              childAspectRatio: 9 / 5,
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 10),
                           delegate: SliverChildBuilderDelegate(
