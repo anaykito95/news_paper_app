@@ -15,7 +15,7 @@ class NewsPaperList extends StatelessWidget {
   Widget build(BuildContext context) => GridView(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 1,
-          childAspectRatio: 2 / 1,
+          childAspectRatio: 3 / 1,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
         ),
@@ -49,7 +49,7 @@ class NewsPaperListItem extends StatelessWidget {
                   ))),
       child: Card(
         color: newspaper.color,
-        margin: const EdgeInsets.all(20),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         clipBehavior: Clip.hardEdge,
         elevation: 10,
