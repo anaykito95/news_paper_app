@@ -86,6 +86,21 @@ class _NoticeDetailState extends State<NoticeDetail> with TickerProviderStateMix
                   top: false,
                   child: Markdown(
                     data: html2md.convert(notice.html),
+                    imageBuilder: (uri, title, alt) => GestureDetector(
+                        child: Image.network(uri.toString()),
+                        onTap: () => showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  content: Image.network(
+                                    uri.toString(),
+
+                                    fit: BoxFit.fill,
+                                  ),
+                                  contentPadding: const EdgeInsets.all(0),
+                                  clipBehavior: Clip.hardEdge,
+                                  shape: new RoundedRectangleBorder(
+                                      borderRadius: new BorderRadius.circular(10)),
+                                ))),
                     imageDirectory: notice.newspaperBase.baseUrl,
 //                    padding: const EdgeInsets.all(0),
                     onTapLink: (href) => launch(href),
