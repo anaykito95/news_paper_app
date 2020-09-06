@@ -40,10 +40,13 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
             backgroundColor: notices.newspaperBase.bannerColor,
             actionsIconTheme: IconThemeData(color: notices.newspaperBase.actionColor),
             actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.web), onPressed: () => launch(notices.newspaperBase.baseUrl)),
-              IconButton(
-                  icon: Icon(Icons.loop), onPressed: () => notices.synchronize(useCache: false))
+              Tooltip(
+                message: 'Abrir en navegador',
+                child: IconButton(
+                    icon: Icon(Icons.web), onPressed: () => launch(notices.newspaperBase.baseUrl)),
+              ),
+//              IconButton(
+//                  icon: Icon(Icons.loop), onPressed: () => notices.synchronize(useCache: false))
             ],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios, color: notices.newspaperBase.actionColor),
@@ -102,7 +105,7 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
           SliverLayoutBuilder(
             builder: (context, constraints) => notices.notices == null
                 ? SliverFillRemaining(
-                    child: ShimmerPlaceholder(),
+                    child: ShimmerPlaceholder(itemCount: 5,),
                   )
                 : notices.notices.length > 0
                     ? SliverPadding(

@@ -70,6 +70,6 @@ class JuventudRebelde extends NewspaperBase {
     Section(name: 'Internacionales', url: '$baseUrl/internacionales', id: '$baseUrl/inter'),
     Section(name: 'Ciencia y Técnica', url: '$baseUrl/ciencia-tecnica', id: '$baseUrl/ciencia'),
     Section(name: 'Cultura', url: '$baseUrl/cultura', id: '$baseUrl/cultura'),
-    Section(name: 'Deporte', url: '$baseUrl/deporte', id: '$baseUrl/deporte'),
+    Section(name: 'Deporte', url: '$baseUrl/deportes', id: '$baseUrl/deportes'),
   ];
 }

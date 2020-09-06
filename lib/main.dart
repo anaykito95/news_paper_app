@@ -17,6 +17,13 @@ class App extends StatelessWidget {
       child: Consumer<AppStateNotifier>(
         builder: (context, appState, child) => MaterialApp(
             title: 'Periodicos de Cuba',
+            builder: (context, child) {
+              return ScrollConfiguration(
+                behavior: MyBehavior(),
+                child: child,
+              );
+            },
+
             home: Home(),
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
@@ -24,5 +31,13 @@ class App extends StatelessWidget {
             themeMode: appState.isDarkMode ? ThemeMode.dark : ThemeMode.light),
       ),
     );
+  }
+}
+
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
   }
 }

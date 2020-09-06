@@ -24,7 +24,7 @@ class SectionDetail extends StatelessWidget {
         future: loadData(),
         initialData: null,
         builder: (context, snapshot) => snapshot.data == null
-            ? ShimmerPlaceholder()
+            ? ShimmerPlaceholder(itemCount: 5,)
             : snapshot.data.length > 0
                 ? Padding(
                     padding: const EdgeInsets.all(10.0),
