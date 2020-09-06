@@ -7,6 +7,7 @@ import 'package:news_paper/ui/screen/section_detail.dart';
 import 'package:news_paper/ui/widget/notice_grid_item.dart';
 import 'package:news_paper/ui/widget/placeholder.dart';
 import 'package:provider/provider.dart';
+import 'dart:math' as math;
 import 'package:url_launcher/url_launcher.dart';
 
 class NewspaperDetail extends StatefulWidget {
@@ -29,8 +30,9 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            floating: true,
+            floating: notices.newspaperBase.sections.isNotEmpty,
             pinned: true,
+            elevation: 5,
             title: Text(
               notices.newspaperBase.title,
               overflow: TextOverflow.ellipsis,
@@ -45,54 +47,56 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
                 child: IconButton(
                     icon: Icon(Icons.web), onPressed: () => launch(notices.newspaperBase.baseUrl)),
               ),
-//              IconButton(
-//                  icon: Icon(Icons.loop), onPressed: () => notices.synchronize(useCache: false))
+              Tooltip(
+                message: 'Refrescar',
+                child: IconButton(
+                    icon: Icon(Icons.refresh),
+                    onPressed: () => notices.synchronize(useCache: false)),
+              )
             ],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios, color: notices.newspaperBase.actionColor),
               onPressed: () => Navigator.of(context).pop(),
             ),
-            flexibleSpace: FlexibleSpaceBar(
-              collapseMode: CollapseMode.parallax,
-              background: Padding(
-                padding: const EdgeInsets.only(bottom: 60),
-//                child: Image.asset(
-//                  'assets/images/${notices.newspaperBase.assetBannerName}',
-//                  fit: BoxFit.scaleDown,
-//                  alignment: Alignment.bottomCenter,
-//                ),
-              ),
-            ),
+//            flexibleSpace: FlexibleSpaceBar(
+//              collapseMode: CollapseMode.parallax,
+//              background: Padding(
+//                padding: const EdgeInsets.only(bottom: 60),
+//              ),
+//            ),
 //            expandedHeight: (MediaQuery.of(context).size.height * 0.15) + 60,
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(60),
-              child: Container(
-                height: 60,
-                color: Colors.black45,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: notices.newspaperBase.sections.length,
-                  itemBuilder: (context, i) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ChangeNotifierProvider.value(
-                      value: notices.newspaperBase.sections[i],
-                      child: Consumer<Section>(
-                        builder: (context, section, child) => GestureDetector(
-                          onTap: section.url == null
-                              ? null
-                              : () => Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => SectionDetail(
-                                        section: section,
-                                        base: notices.newspaperBase,
-                                      ))),
-                          child: Chip(
-                            elevation: 5,
-                            label: Text(
-                              section.name,
-                              style: TextStyle(color: notices.newspaperBase.actionColor),
+            bottom: notices.newspaperBase.sections.isEmpty ? null : PreferredSize(
+              preferredSize: Size.fromHeight(notices.newspaperBase.sections.isEmpty ? 0 : 60),
+              child: Visibility(
+                visible: notices.newspaperBase.sections.isNotEmpty,
+                child: Container(
+                  height: 60,
+                  color: Colors.black45,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: notices.newspaperBase.sections.length,
+                    itemBuilder: (context, i) => Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ChangeNotifierProvider.value(
+                        value: notices.newspaperBase.sections[i],
+                        child: Consumer<Section>(
+                          builder: (context, section, child) => GestureDetector(
+                            onTap: section.url == null
+                                ? null
+                                : () => Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => SectionDetail(
+                                          section: section,
+                                          base: notices.newspaperBase,
+                                        ))),
+                            child: Chip(
+                              elevation: 5,
+                              label: Text(
+                                section.name,
+                                style: TextStyle(color: notices.newspaperBase.actionColor),
+                              ),
+                              backgroundColor:
+                                  section.enable ? notices.newspaperBase.color : Colors.grey,
                             ),
-                            backgroundColor:
-                                section.enable ? notices.newspaperBase.color : Colors.grey,
                           ),
                         ),
                       ),
@@ -105,22 +109,35 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
           SliverLayoutBuilder(
             builder: (context, constraints) => notices.notices == null
                 ? SliverFillRemaining(
-                    child: ShimmerPlaceholder(itemCount: 5,),
+                    child: ShimmerPlaceholder(
+                      itemCount: 5,
+                    ),
                   )
                 : notices.notices.length > 0
                     ? SliverPadding(
-                        padding: const EdgeInsets.all(0),
-                        sliver: SliverGrid(
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 1,
-                              childAspectRatio: 9 / 5,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10),
+                        padding: EdgeInsets.zero,
+                        sliver: SliverList(
                           delegate: SliverChildBuilderDelegate(
-                            (ctx, i) => NoticeGridItem(
-                              notice: notices.notices[i],
-                            ),
-                            childCount: notices.notices.length,
+                            (ctx, index) {
+                              final int i = index ~/ 2;
+                              return index.isEven
+                                  ? ChangeNotifierProvider.value(
+                                      value: notices.notices[i],
+                                      child: NoticeListItem(),
+                                    )
+                                  : Divider(
+                                      height: 0,
+                                      thickness: 0.5,
+                                      color: Colors.grey,
+                                    );
+                            },
+                            semanticIndexCallback: (Widget widget, int localIndex) {
+                              if (localIndex.isEven) {
+                                return localIndex ~/ 2;
+                              }
+                              return null;
+                            },
+                            childCount: math.max(0, notices.notices.length * 2 - 1),
                           ),
                         ),
                       )

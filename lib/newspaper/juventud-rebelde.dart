@@ -26,33 +26,6 @@ class JuventudRebelde extends NewspaperBase {
   String get title => 'Juventud Rebelde';
 
   @override
-  Future<List<Notice>> parseNewsFromDocument(dom.Document document) async {
-    List<Notice> result = [];
-    try {
-      final elements = document.getElementsByClassName('item-news');
-      elements.forEach((element) {
-        try {
-          var tagImg = element.getElementsByTagName('img');
-          var tagA = element.getElementsByTagName('a');
-          final notice = Notice(
-              section: element.getElementsByClassName('section')[1].text,
-              newspaperBase: this,
-              url: tagA.isNotEmpty ? tagA[0]?.attributes['href'] : null,
-              title: tagA.isNotEmpty ? tagA[0]?.getElementsByClassName('title')[0]?.text : null,
-              summary: element.getElementsByClassName('sumary')[0].text,
-              imageUrl: tagImg.isNotEmpty ? tagImg[0]?.attributes['src'] : null);
-          result.add(notice);
-        } catch (e) {
-          print(e);
-        }
-      });
-    } catch (e) {
-      print(e);
-    }
-    return result;
-  }
-
-  @override
   Future<Notice> parseSingleNotice(dom.Document document) async {
     try {
       final notice =
@@ -72,4 +45,7 @@ class JuventudRebelde extends NewspaperBase {
     Section(name: 'Cultura', url: '$baseUrl/cultura', id: '$baseUrl/cultura'),
     Section(name: 'Deporte', url: '$baseUrl/deportes', id: '$baseUrl/deportes'),
   ];
+
+  @override
+  String get rssUrl => 'http://www.juventudrebelde.cu/get/rss/grupo/generales';
 }

@@ -26,40 +26,6 @@ class Trabajadores extends NewspaperBase {
   String get title => 'Trabajadores';
 
   @override
-  Future<List<Notice>> parseNewsFromDocument(dom.Document document) async {
-    List<Notice> result = [];
-    try {
-      final elements = document.getElementsByTagName('article');
-      elements.forEach((element) {
-        try {
-          final url = element.getElementsByClassName('post-thumbnail')?.first?.attributes['href'];
-          final h2TagList = element.getElementsByTagName('h2');
-          final h3TagList = element.getElementsByTagName('h3');
-          final notice = Notice(
-            url: url,
-            title: h2TagList.isNotEmpty ? h2TagList?.first?.text
-                : h3TagList.isNotEmpty ? h3TagList?.first?.text : '',
-            newspaperBase: this,
-//            summary: element.getElementsByTagName('p')?.first?.text,
-            imageUrl: element
-                .getElementsByClassName('post-thumbnail')
-                ?.first
-                ?.getElementsByTagName('img')
-                ?.first
-                ?.attributes['data-src'],
-          );
-          result.add(notice);
-        } catch (e) {
-          print(e);
-        }
-      });
-    } catch (e) {
-      print(e);
-    }
-    return result;
-  }
-
-  @override
   Future<Notice> parseSingleNotice(dom.Document document) async {
     try {
       final notice = Notice(html: document.getElementsByTagName('article')?.first?.outerHtml);
@@ -81,4 +47,7 @@ class Trabajadores extends NewspaperBase {
         Section(name: 'Salud', url: '$baseUrl/salud', id: '$baseUrl/suplementos'),
         Section(name: 'Historia', url: '$baseUrl/memoria-historica', id: '$baseUrl/history')
       ];
+
+  @override
+  String get rssUrl => 'http://www.trabajadores.cu/feed/';
 }

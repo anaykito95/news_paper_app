@@ -91,6 +91,8 @@ class _NoticeDetailState extends State<NoticeDetail> with TickerProviderStateMix
                       final imageUrl = uri.toString().startsWith('http')
                           ? uri.toString()
                           : '${notice.newspaperBase.baseUrl}${uri.toString()}';
+                      Future.delayed(
+                          Duration(milliseconds: 500), () => notice.setNoticeImage(imageUrl));
                       return GestureDetector(
                           child: Image.network(imageUrl),
                           onTap: () => showDialog(

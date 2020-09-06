@@ -26,36 +26,6 @@ class Tribuna extends NewspaperBase {
   String get title => 'Tribuna de la Habana';
 
   @override
-  Future<List<Notice>> parseNewsFromDocument(dom.Document document) async {
-    List<Notice> result = [];
-    try {
-      final elements = document.getElementsByTagName('article');
-      elements.forEach((element) {
-        try {
-          final notice = Notice(
-            url: element.getElementsByClassName('post-thumbnail')?.first?.attributes['href'],
-            title: element.getElementsByTagName('h2')?.first?.text ?? '',
-            newspaperBase: this,
-//            summary: element.getElementsByTagName('p')?.first?.text,
-            imageUrl: element
-                .getElementsByClassName('post-thumbnail')
-                ?.first
-                ?.getElementsByTagName('img')
-                ?.first
-                ?.attributes['data-src'],
-          );
-          result.add(notice);
-        } catch (e) {
-          print(e);
-        }
-      });
-    } catch (e) {
-      print(e);
-    }
-    return result;
-  }
-
-  @override
   Future<Notice> parseSingleNotice(dom.Document document) async {
     try {
       final notice =
@@ -78,4 +48,7 @@ class Tribuna extends NewspaperBase {
         Section(name: 'Salud', url: '$baseUrl/salud', id: '$baseUrl/suplementos'),
         Section(name: 'Historia', url: '$baseUrl/memoria-historica', id: '$baseUrl/history')
       ];
+
+  @override
+  String get rssUrl => 'http://www.tribuna.cu/feed';
 }

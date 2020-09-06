@@ -5,14 +5,14 @@ import 'package:news_paper/provider/provider_news.dart';
 import 'package:news_paper/ui/screen/notice_detail.dart';
 import 'package:provider/provider.dart';
 
-class NoticeGridItem extends StatelessWidget {
-  final Notice notice;
-
-  const NoticeGridItem({Key key, this.notice}) : super(key: key);
-
+class NoticeListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    final notice = Provider.of<Notice>(context, listen: false);
+    return InkWell(
+      highlightColor: notice.newspaperBase.actionColor,
+      hoverColor: notice.newspaperBase.actionColor,
+      splashColor: notice.newspaperBase.actionColor,
       onTap: () {
         Navigator.of(context).push(
           PageRouteBuilder(
@@ -22,42 +22,57 @@ class NoticeGridItem extends StatelessWidget {
           ),
         );
       },
-      child: Container(
-        child: GridTile(
-          footer: Container(
-            color: Colors.white70,
-            padding: const EdgeInsets.all(10),
-            child: Text(
-              '${notice.title}',
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.black87),
+      child: Consumer<Notice>(
+        builder: (context, notice, child) {
+          final data = Padding(
+            padding: const EdgeInsets.all(8),
+            child: ListTile(
+              title: Text(notice.date,
+                  style: Theme.of(context)
+                      .textTheme
+                      .caption
+                      .copyWith(color: notice.imageUrl != null ? Colors.white : Colors.black87)),
+              subtitle: Text(
+                notice.title,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle1
+                    .copyWith(color: notice.imageUrl != null ? Colors.white : Colors.black87),
+              ),
             ),
-          ),
-          child: notice.imageUrl == null
-              ? Container(
-                  color: Colors.black12,
-                  child: Image.asset(
-                    'assets/images/notice_placeholder.png',
-                  ))
-              : CachedNetworkImage(
-                  imageUrl: notice.imageUrl,
-                  placeholder: (_, __) => Container(
-                      color: Colors.black12,
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      )),
-                  errorWidget: (ctx, _, __) => Container(
-                      color: Colors.black12,
-                      child: Center(
-                        child: Icon(FontAwesomeIcons.solidNewspaper),
-                      )),
-                  fit: BoxFit.cover,
-                  height: double.infinity,
-                  width: double.infinity,
-                ),
-        ),
+          );
+          return notice.imageUrl == null
+              ? data
+              : Stack(
+                  children: <Widget>[
+                    Builder(
+                        builder: (context) => CachedNetworkImage(
+                              imageUrl: notice.imageUrl,
+                              color: Colors.black54,
+                              colorBlendMode: BlendMode.darken,
+                              placeholder: (_, __) => Container(
+                                  color: Colors.black54,
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  )),
+                              errorWidget: (ctx, _, __) => Container(
+                                  color: Colors.black54,
+                                  child: Center(
+                                    child: Icon(FontAwesomeIcons.solidNewspaper),
+                                  )),
+                              fit: BoxFit.cover,
+                            )),
+                    Positioned(
+                      bottom: 1,
+                      right: 1,
+                      left: 1,
+                      child: data,
+                    ),
+                  ],
+                );
+        },
       ),
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:news_paper/newspaper/base.dart';
 
@@ -6,34 +8,67 @@ class Notice with ChangeNotifier {
   final String title;
   final String section;
   final String summary;
-  final String imageUrl;
+  final String date;
   final String url;
+  String imageUrl;
   NewspaperBase newspaperBase;
   String html;
   double _textScaleFactor;
 
   double get textScaleFactor => _textScaleFactor ?? 1.0;
 
-  Notice(
-      {this.section,
-      this.id,
-      this.url,
-      this.html,
-      this.title,
-      this.newspaperBase,
-      this.summary,
-      this.imageUrl});
+  Notice({this.section,
+    this.id,
+    this.url,
+    this.date,
+    this.html,
+    this.title,
+    this.newspaperBase,
+    this.summary,
+    this.imageUrl});
 
   synchronize(BuildContext context) async {
     Notice data = await newspaperBase.fetchNoticeData(url);
     this.html = data?.html;
-    this._textScaleFactor = _textScaleFactor ?? MediaQuery.of(context).textScaleFactor;
+    this._textScaleFactor = _textScaleFactor ?? MediaQuery
+        .of(context)
+        .textScaleFactor;
     notifyListeners();
+  }
+
+  setNoticeImage(String imageUrl) async {
+    if (this.imageUrl == null) {
+      this.imageUrl = imageUrl;
+      notifyListeners();
+    } else {
+      final actualSize = await _calculateImageDimension(this.imageUrl);
+      final newSize = await _calculateImageDimension(imageUrl);
+
+      if (actualSize.width < newSize.width || actualSize.height < newSize.height) {
+        this.imageUrl = imageUrl;
+        notifyListeners();
+      }
+    }
   }
 
   changeTextScaleFactor(double newScale) {
     this._textScaleFactor = newScale;
     notifyListeners();
+  }
+
+  Future<Size> _calculateImageDimension(String url) {
+    Completer<Size> completer = Completer();
+    Image image = Image.network(url);
+    image.image.resolve(ImageConfiguration()).addListener(
+      ImageStreamListener(
+            (ImageInfo image, bool synchronousCall) {
+          var myImage = image.image;
+          Size size = Size(myImage.width.toDouble(), myImage.height.toDouble());
+          completer.complete(size);
+        },
+      ),
+    );
+    return completer.future;
   }
 }
 

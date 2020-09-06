@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:news_paper/newspaper/base.dart';
+import 'package:news_paper/newspaper/bohemia.dart';
 import 'package:news_paper/newspaper/granma.dart';
+import 'package:news_paper/newspaper/jiribilla.dart';
 import 'package:news_paper/newspaper/juventud-rebelde.dart';
 import 'package:news_paper/newspaper/trabajadores.dart';
 import 'package:news_paper/newspaper/tribuna.dart';
@@ -14,15 +16,20 @@ class NewsPaperList extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GridView(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-          childAspectRatio: 3 / 1,
+          crossAxisCount: 2,
+          childAspectRatio: 1 / 1,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
         ),
         children: <Widget>[
           NewsPaperListItem(newspaper: JuventudRebelde()),
           NewsPaperListItem(newspaper: Granma()),
-//          NewsPaperListItem(newspaper: Tribuna()),
+          NewsPaperListItem(newspaper: Tribuna()),
+          NewsPaperListItem(newspaper: Bohemia()),
+          NewsPaperListItem(
+            newspaper: Jiribilla(),
+            circle: true,
+          ),
           NewsPaperListItem(
             newspaper: Trabajadores(),
             circle: true,
@@ -49,8 +56,8 @@ class NewsPaperListItem extends StatelessWidget {
                   ))),
       child: Card(
         color: newspaper.color,
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         clipBehavior: Clip.hardEdge,
         elevation: 10,
         child: circle ?? false
@@ -59,7 +66,7 @@ class NewsPaperListItem extends StatelessWidget {
                 margin: const EdgeInsets.all(10),
                 alignment: Alignment.center,
                 child: CircleAvatar(
-                  radius: 100,
+                    radius: 100,
                     backgroundImage: AssetImage('assets/images/${newspaper.assetIconName}')),
               )
             : Container(
@@ -78,9 +85,8 @@ class NewsPaperListItem extends StatelessWidget {
         final radius = min(constraints.maxHeight / 4, constraints.maxWidth / 4);
         return Center(
           child: CircleAvatar(
-            radius: radius,
-            backgroundImage: AssetImage('assets/images/${newspaper.assetIconName}')
-          ),
+              radius: radius,
+              backgroundImage: AssetImage('assets/images/${newspaper.assetIconName}')),
         );
       },
     );

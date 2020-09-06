@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:news_paper/ui/app_theme.dart';
 import 'package:news_paper/ui/home.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
-  runApp(App());
+  initializeDateFormatting("es_ES", null).then((_) => runApp(App()));
 }
 
 class App extends StatelessWidget {
@@ -23,7 +24,6 @@ class App extends StatelessWidget {
                 child: child,
               );
             },
-
             home: Home(),
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
