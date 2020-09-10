@@ -26,15 +26,7 @@ class Trabajadores extends NewspaperBase {
   String get title => 'Trabajadores';
 
   @override
-  Future<Notice> parseSingleNotice(dom.Document document) async {
-    try {
-      final notice = Notice(html: document.getElementsByTagName('article')?.first?.outerHtml);
-      return notice;
-    } catch (e) {
-      print(e);
-    }
-    return null;
-  }
+  String get baseName => 'trabajadores';
 
   @override
   List<Section> get sections => [
@@ -50,4 +42,7 @@ class Trabajadores extends NewspaperBase {
 
   @override
   String get rssUrl => 'http://www.trabajadores.cu/feed/';
+
+  @override
+  String get htmlClassNoticeData => 'entry-content';
 }

@@ -14,10 +14,10 @@ class JuventudRebelde extends NewspaperBase {
   String get baseUrl => 'http://www.juventudrebelde.cu';
 
   @override
-  Color get color => Colors.blue;
+  Color get color => Color(0xff009DDE);
 
   @override
-  Color get bannerColor => Colors.blue;
+  Color get bannerColor => Color(0xff009DDE);
 
   @override
   Color get actionColor => Colors.white;
@@ -26,16 +26,7 @@ class JuventudRebelde extends NewspaperBase {
   String get title => 'Juventud Rebelde';
 
   @override
-  Future<Notice> parseSingleNotice(dom.Document document) async {
-    try {
-      final notice =
-      Notice(html: document.getElementsByClassName('news-content')?.first?.outerHtml);
-      return notice;
-    } catch (e) {
-      print(e);
-    }
-    return null;
-  }
+  String get baseName => 'juventud';
 
   @override
   List<Section> get sections => [
@@ -48,4 +39,7 @@ class JuventudRebelde extends NewspaperBase {
 
   @override
   String get rssUrl => 'http://www.juventudrebelde.cu/get/rss/grupo/generales';
+
+  @override
+  String get htmlClassNoticeData => 'article';
 }

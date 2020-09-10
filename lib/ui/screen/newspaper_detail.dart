@@ -51,7 +51,7 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
                 message: 'Refrescar',
                 child: IconButton(
                     icon: Icon(Icons.refresh),
-                    onPressed: () => notices.synchronize(useCache: false)),
+                    onPressed: () => notices.synchronize(force: true)),
               )
             ],
             leading: IconButton(
@@ -127,8 +127,8 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
                                     )
                                   : Divider(
                                       height: 0,
-                                      thickness: 0.5,
-                                      color: Colors.grey,
+                                      thickness: 0.7,
+                                      color: Colors.black87,
                                     );
                             },
                             semanticIndexCallback: (Widget widget, int localIndex) {
@@ -149,7 +149,7 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
                           children: <Widget>[
                             Text('Sin noticias que mostrar'),
                             FloatingActionButton(
-                              onPressed: () => notices.synchronize(useCache: false),
+                              onPressed: () => notices.synchronize(force: true),
                               child: Icon(FontAwesomeIcons.newspaper),
                             )
                           ],

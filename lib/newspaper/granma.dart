@@ -25,6 +25,9 @@ class Granma extends NewspaperBase {
   String get title => 'Granma';
 
   @override
+  String get baseName => 'granma';
+
+  @override
   List<Section> get sections => [
     Section(name: 'Cuba', url: '$baseUrl/cuba', id: '$baseUrl/cuba'),
     Section(name: 'Mundo', url: '$baseUrl/mundo', id: '$baseUrl/inter'),
@@ -36,16 +39,8 @@ class Granma extends NewspaperBase {
   ];
 
   @override
-  Future<Notice> parseSingleNotice(dom.Document document) async {
-    try {
-      final notice = Notice(html: document.getElementsByClassName('g-story')?.first?.outerHtml);
-      return notice;
-    } catch (e) {
-      print(e);
-    }
-    return null;
-  }
+  String get rssUrl => 'http://www.granma.cu/feed';
 
   @override
-  String get rssUrl => 'http://www.granma.cu/feed';
+  String get htmlClassNoticeData => 'story-content';
 }

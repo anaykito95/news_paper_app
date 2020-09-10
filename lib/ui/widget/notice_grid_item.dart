@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:news_paper/provider/provider_news.dart';
+import 'package:news_paper/model/notice.dart';
+import 'package:html2md/html2md.dart' as html2md;
 import 'package:news_paper/ui/screen/notice_detail.dart';
 import 'package:provider/provider.dart';
 
@@ -31,15 +33,29 @@ class NoticeListItem extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .caption
-                      .copyWith(color: notice.imageUrl != null ? Colors.white : Colors.black87)),
-              subtitle: Text(
-                notice.title,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context)
-                    .textTheme
-                    .subtitle1
-                    .copyWith(color: notice.imageUrl != null ? Colors.white : Colors.black87),
+                      .copyWith(color: notice.imageUrl != null ? Colors.white : Colors.black54)),
+              subtitle: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    notice.title,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: notice.imageUrl != null ? Colors.white : Colors.black87,
+                      fontSize: 22
+                    ),
+                  ),
+                  Visibility(
+                      visible: notice.summary != null,
+                      child: Markdown(
+                        data: html2md.convert(notice.summary),
+                        physics: NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(4),
+                        shrinkWrap: true,
+                      ))
+                ],
               ),
             ),
           );

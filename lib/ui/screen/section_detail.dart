@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_paper/model/notice.dart';
 import 'package:news_paper/newspaper/base.dart';
 import 'package:news_paper/provider/provider_news.dart';
 import 'package:news_paper/ui/widget/notice_grid_item.dart';

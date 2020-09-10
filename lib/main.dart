@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:news_paper/model/notice.dart';
 import 'package:news_paper/ui/app_theme.dart';
 import 'package:news_paper/ui/home.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(NoticeAdapter());
   initializeDateFormatting("es_ES", null).then((_) => runApp(App()));
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
+  @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -24,7 +34,17 @@ class App extends StatelessWidget {
                 child: child,
               );
             },
-            home: Home(),
+            home: FutureBuilder(
+                future: Hive.openBox('app'),
+                builder: (context, snapshot) {
+                  return snapshot.connectionState == ConnectionState.done
+                      ? Home()
+                      : Scaffold(
+                          body: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                }),
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
@@ -32,12 +52,17 @@ class App extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    Hive.close();
+  }
 }
 
 class MyBehavior extends ScrollBehavior {
   @override
-  Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
+  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
     return child;
   }
 }

@@ -7,7 +7,7 @@ import 'package:news_paper/newspaper/granma.dart';
 import 'package:news_paper/newspaper/jiribilla.dart';
 import 'package:news_paper/newspaper/juventud-rebelde.dart';
 import 'package:news_paper/newspaper/trabajadores.dart';
-import 'package:news_paper/newspaper/tribuna.dart';
+import 'package:news_paper/newspaper/cubadebate.dart';
 import 'package:news_paper/provider/provider_news.dart';
 import 'package:news_paper/ui/screen/newspaper_detail.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +24,7 @@ class NewsPaperList extends StatelessWidget {
         children: <Widget>[
           NewsPaperListItem(newspaper: JuventudRebelde()),
           NewsPaperListItem(newspaper: Granma()),
-          NewsPaperListItem(newspaper: Tribuna()),
+          NewsPaperListItem(newspaper: Cubadebate()),
           NewsPaperListItem(newspaper: Bohemia()),
           NewsPaperListItem(
             newspaper: Jiribilla(),

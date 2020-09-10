@@ -25,6 +25,9 @@ class Jiribilla extends NewspaperBase {
   String get title => 'La Jiribilla';
 
   @override
+  String get baseName => 'jiribilla';
+
+  @override
   List<Section> get sections => [
 //    Section(name: 'Cuba', url: '$baseUrl/cuba', id: '$baseUrl/cuba'),
 //    Section(name: 'Mundo', url: '$baseUrl/mundo', id: '$baseUrl/inter'),
@@ -36,16 +39,8 @@ class Jiribilla extends NewspaperBase {
   ];
 
   @override
-  Future<Notice> parseSingleNotice(dom.Document document) async {
-    try {
-      final notice = Notice(html: document.getElementsByClassName('article_container')?.first?.outerHtml);
-      return notice;
-    } catch (e) {
-      print(e);
-    }
-    return null;
-  }
+  String get rssUrl => 'http://lajiribilla.cu/rss';
 
   @override
-  String get rssUrl => 'http://lajiribilla.cu/rss';
+  String get htmlClassNoticeData => 'article-body';
 }

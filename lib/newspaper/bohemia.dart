@@ -25,6 +25,9 @@ class Bohemia extends NewspaperBase {
   String get title => 'Revista Bohemia';
 
   @override
+  String get baseName => 'bohemia';
+
+  @override
   List<Section> get sections => [
 //    Section(name: 'Cuba', url: '$baseUrl/cuba', id: '$baseUrl/cuba'),
 //    Section(name: 'Mundo', url: '$baseUrl/mundo', id: '$baseUrl/inter'),
@@ -36,16 +39,8 @@ class Bohemia extends NewspaperBase {
   ];
 
   @override
-  Future<Notice> parseSingleNotice(dom.Document document) async {
-    try {
-      final notice = Notice(html: document.getElementsByClassName('review-content')?.first?.outerHtml);
-      return notice;
-    } catch (e) {
-      print(e);
-    }
-    return null;
-  }
+  String get rssUrl => 'http://www.bohemia.cu/feed';
 
   @override
-  String get rssUrl => 'http://www.bohemia.cu/feed';
+  String get htmlClassNoticeData => 'the-content';
 }
