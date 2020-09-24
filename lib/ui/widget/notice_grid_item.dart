@@ -29,6 +29,10 @@ class NoticeListItem extends StatelessWidget {
           final data = Padding(
             padding: const EdgeInsets.all(8),
             child: ListTile(
+              trailing: Visibility(
+                visible: notice.html != null,
+                child: Icon(Icons.save, size: 12, color: Colors.grey),
+              ),
               title: Text(notice.date,
                   style: Theme.of(context)
                       .textTheme
@@ -42,15 +46,16 @@ class NoticeListItem extends StatelessWidget {
                     notice.title,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: notice.imageUrl != null ? Colors.white : Colors.black87,
-                      fontSize: 22
-                    ),
+                    style: TextStyle(color: Colors.black87, fontSize: 22),
                   ),
                   Visibility(
                       visible: notice.summary != null,
                       child: Markdown(
                         data: html2md.convert(notice.summary),
+                        styleSheet: MarkdownStyleSheet(
+                            p: TextStyle(
+                          color: Colors.black54,
+                        )),
                         physics: NeverScrollableScrollPhysics(),
                         padding: const EdgeInsets.all(4),
                         shrinkWrap: true,
@@ -59,35 +64,16 @@ class NoticeListItem extends StatelessWidget {
               ),
             ),
           );
-          return notice.imageUrl == null
+          return notice.imageUrl == null || true
               ? data
-              : Stack(
-                  children: <Widget>[
-                    Builder(
-                        builder: (context) => CachedNetworkImage(
-                              imageUrl: notice.imageUrl,
-                              color: Colors.black54,
-                              colorBlendMode: BlendMode.darken,
-                              placeholder: (_, __) => Container(
-                                  color: Colors.black54,
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  )),
-                              errorWidget: (ctx, _, __) => Container(
-                                  color: Colors.black54,
-                                  child: Center(
-                                    child: Icon(FontAwesomeIcons.solidNewspaper),
-                                  )),
-                              fit: BoxFit.cover,
-                            )),
-                    Positioned(
-                      bottom: 1,
-                      right: 1,
-                      left: 1,
-                      child: data,
-                    ),
-                  ],
-                );
+              : Container(
+                  child: data,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                    colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.7), BlendMode.darken),
+                    image: CachedNetworkImageProvider(notice.imageUrl),
+                    fit: BoxFit.cover,
+                  )));
         },
       ),
     );

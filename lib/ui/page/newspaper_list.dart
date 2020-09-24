@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:news_paper/newspaper/acn.dart';
 import 'package:news_paper/newspaper/base.dart';
 import 'package:news_paper/newspaper/bohemia.dart';
+import 'package:news_paper/newspaper/cubahora.dart';
 import 'package:news_paper/newspaper/granma.dart';
 import 'package:news_paper/newspaper/jiribilla.dart';
 import 'package:news_paper/newspaper/juventud-rebelde.dart';
@@ -16,8 +18,8 @@ class NewsPaperList extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GridView(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1 / 1,
+          crossAxisCount: 1,
+          childAspectRatio: 3 / 1,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
         ),
@@ -26,14 +28,10 @@ class NewsPaperList extends StatelessWidget {
           NewsPaperListItem(newspaper: Granma()),
           NewsPaperListItem(newspaper: Cubadebate()),
           NewsPaperListItem(newspaper: Bohemia()),
-          NewsPaperListItem(
-            newspaper: Jiribilla(),
-            circle: true,
-          ),
-          NewsPaperListItem(
-            newspaper: Trabajadores(),
-            circle: true,
-          ),
+          NewsPaperListItem(newspaper: Jiribilla(), circle: true),
+          NewsPaperListItem(newspaper: Trabajadores(), circle: true),
+          NewsPaperListItem(newspaper: Acn()),
+          NewsPaperListItem(newspaper: Cubahora()),
         ],
       );
 }
@@ -60,21 +58,35 @@ class NewsPaperListItem extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         clipBehavior: Clip.hardEdge,
         elevation: 10,
-        child: circle ?? false
-            ? Container(
-                height: 200,
-                margin: const EdgeInsets.all(10),
-                alignment: Alignment.center,
-                child: CircleAvatar(
-                    radius: 100,
-                    backgroundImage: AssetImage('assets/images/${newspaper.assetIconName}')),
-              )
-            : Container(
-                height: 200,
-                margin: const EdgeInsets.all(10),
-                alignment: Alignment.center,
-                child: Image.asset('assets/images/${newspaper.assetIconName}'),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            circle ?? false
+                ? Container(
+                    height: 200,
+                    margin: const EdgeInsets.all(10),
+                    alignment: Alignment.center,
+                    child: CircleAvatar(
+                        radius: 50,
+                        backgroundImage: AssetImage('assets/images/${newspaper.assetIconName}')),
+                  )
+                : Container(
+                    height: 200,
+                    margin: const EdgeInsets.all(10),
+                    alignment: Alignment.center,
+                    child: Image.asset('assets/images/${newspaper.assetIconName}'),
+                  ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text(
+                  newspaper.title,
+                  style: Theme.of(context).textTheme.headline6.copyWith(color: newspaper.actionColor),
+                ),
               ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -136,13 +136,16 @@ abstract class NewspaperBase {
       dom.Document document = parser.parse(response.body);
       return document.getElementsByClassName(htmlClassNoticeData)?.first?.outerHtml;
     } catch (e) {
+      print(e);
       try {
         http.Response response = await http.get(url);
         dom.Document document = parser.parse(response.body);
         return document.getElementsByTagName(htmlClassNoticeData)?.first?.outerHtml;
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
     }
-    return '';
+    return 'Ocurrio un error al cargar la noticia...';
   }
 
   String _getDateTimeHora(String dateParam) {

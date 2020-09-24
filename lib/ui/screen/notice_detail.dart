@@ -1,20 +1,16 @@
 import 'dart:async';
+
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:html2md/html2md.dart' as html2md;
 import 'package:markdown/markdown.dart' as md;
-
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:news_paper/model/notice.dart';
-import 'package:news_paper/provider/provider_news.dart';
 import 'package:news_paper/ui/widget/placeholder.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../util.dart';
 
 class NoticeDetail extends StatefulWidget {
   @override
@@ -151,8 +147,8 @@ class _NoticeDetailState extends State<NoticeDetail> with TickerProviderStateMix
                           final imageUrl = uri.toString().startsWith('http')
                               ? uri.toString()
                               : '${notice.newspaperBase.baseUrl}${uri.toString()}';
-//                      Future.delayed(
-//                          Duration(milliseconds: 500), () => notice.setNoticeImage(imageUrl));
+                      Future.delayed(
+                          Duration(milliseconds: 500), () => notice.setNoticeImage(imageUrl));
                           return GestureDetector(
                               child: Image.network(imageUrl),
                               onTap: () => showDialog(
