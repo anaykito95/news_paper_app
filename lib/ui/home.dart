@@ -13,30 +13,34 @@ class Home extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: ListTile(
-            title: Text(
-              'Periódicos de Cuba',
-              style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black87),
-            ),
-            trailing: IconButton(
-              icon: Icon(Icons.info_outline),
-              onPressed: () => PackageInfo.fromPlatform().then((info) => showAboutDialog(
-                      context: context,
-                      applicationIcon: CircleAvatar(
-                        backgroundImage: AssetImage('assets/icon/icon.png'),
-                      ),
-                      children: [
-                        ListTile(
-                          title: Text('Desarrollador'),
-                          subtitle: Text('Ing. Andrés Forns Jusino'),
-                        ),
-                        ListTile(
-                          title: Text('Version'),
-                          subtitle: Text('${info.version}.${info.buildNumber}'),
-                        )
-                      ])),
-            ),
+          title: Text(
+            'Periódicos de Cuba',
+            style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black87),
           ),
+          actions: <Widget>[
+            Tooltip(
+              message: 'Información',
+              child: IconButton(
+                icon: Icon(Icons.info_outline),
+                color: Colors.black54,
+                onPressed: () => PackageInfo.fromPlatform().then((info) => showAboutDialog(
+                        context: context,
+                        applicationIcon: CircleAvatar(
+                          backgroundImage: AssetImage('assets/icon/icon.png'),
+                        ),
+                        children: [
+                          ListTile(
+                            title: Text('Desarrollador'),
+                            subtitle: Text('Ing. Andrés Forns Jusino'),
+                          ),
+                          ListTile(
+                            title: Text('Version'),
+                            subtitle: Text('${info.version}.${info.buildNumber}'),
+                          )
+                        ])),
+              ),
+            )
+          ],
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Colors.white),
         ),

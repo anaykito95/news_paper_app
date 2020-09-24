@@ -39,17 +39,29 @@ dependencies:
   html2md: ^0.5.1
   flutter_markdown: ^0.4.3
   package_info: ^0.4.1
+  extended_image: 1.1.0
+  dart_rss: ^1.0.1
+  intl: 0.16.0
+  hive: ^1.4.4
+  hive_flutter: ^0.3.1
 
 dev_dependencies:
+  hive_generator: ^0.7.1
+  build_runner:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: 0.7.5
+  flutter_native_splash: ^0.1.9
 
 flutter_icons:
   image_path: "assets/icon/icon.png"
   adaptative_icon_background: "assets/icon/background.png"
   ios: false
   android: true
+
+flutter_native_splash:
+  image: splash/splash.png
+  color: "ffffff"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

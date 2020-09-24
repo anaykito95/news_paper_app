@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:news_paper/model/notice.dart';
 import 'package:news_paper/newspaper/base.dart';
 import 'package:news_paper/provider/provider_news.dart';
 import 'package:news_paper/ui/widget/notice_grid_item.dart';
 import 'package:news_paper/ui/widget/placeholder.dart';
+import 'package:provider/provider.dart';
 
 class SectionDetail extends StatelessWidget {
   final Section section;
@@ -24,20 +26,16 @@ class SectionDetail extends StatelessWidget {
         future: loadData(),
         initialData: null,
         builder: (context, snapshot) => snapshot.data == null
-            ? ShimmerPlaceholder()
+            ? ShimmerPlaceholder(itemCount: 5,)
             : snapshot.data.length > 0
                 ? Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: GridView.builder(
+                    child: ListView.builder(
                       itemCount: snapshot.data.length,
-                      itemBuilder: (ctx, i) => NoticeGridItem(
-                        notice: snapshot.data[i],
+                      itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
+                        value: snapshot.data[i],
+                        child: NoticeListItem(),
                       ),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 1,
-                          childAspectRatio: 7 / 5,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10),
                     ),
                   )
                 : Center(

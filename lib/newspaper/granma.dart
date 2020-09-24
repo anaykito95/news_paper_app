@@ -25,6 +25,9 @@ class Granma extends NewspaperBase {
   String get title => 'Granma';
 
   @override
+  String get baseName => 'granma';
+
+  @override
   List<Section> get sections => [
     Section(name: 'Cuba', url: '$baseUrl/cuba', id: '$baseUrl/cuba'),
     Section(name: 'Mundo', url: '$baseUrl/mundo', id: '$baseUrl/inter'),
@@ -36,42 +39,8 @@ class Granma extends NewspaperBase {
   ];
 
   @override
-  Future<List<Notice>> parseNewsFromDocument(dom.Document document) async {
-    List<Notice> result = [];
-    try {
-      final elements = document.getElementsByTagName('article');
-      elements.forEach((element) {
-        try {
-          var tagImg = element.getElementsByTagName('img');
-          var tagA = element.getElementsByTagName('a');
-          var tagP = element.getElementsByTagName('p');
-          final notice = Notice(
-              url: tagA.isNotEmpty ? '$baseUrl/${tagA[0]?.attributes['href']}' : null,
-              title: tagA.isNotEmpty ? tagA[0]?.text : null,
-              newspaperBase: this,
-              summary: tagP.isNotEmpty ? tagP[0]?.text : null,
-              imageUrl: tagImg.isNotEmpty && tagImg[0]?.attributes['src'] != null
-                  ? '$baseUrl${tagImg[0]?.attributes['src']}'
-                  : null);
-          result.add(notice);
-        } catch (e) {
-          print(e);
-        }
-      });
-    } catch (e) {
-      print(e);
-    }
-    return result;
-  }
+  String get rssUrl => 'http://www.granma.cu/feed';
 
   @override
-  Future<Notice> parseSingleNotice(dom.Document document) async {
-    try {
-      final notice = Notice(html: document.getElementsByClassName('g-story')?.first?.outerHtml);
-      return notice;
-    } catch (e) {
-      print(e);
-    }
-    return null;
-  }
+  String get htmlClassNoticeData => 'story-content';
 }

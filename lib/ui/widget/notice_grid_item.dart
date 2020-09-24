@@ -1,18 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:news_paper/provider/provider_news.dart';
+import 'package:news_paper/model/notice.dart';
+import 'package:html2md/html2md.dart' as html2md;
 import 'package:news_paper/ui/screen/notice_detail.dart';
 import 'package:provider/provider.dart';
 
-class NoticeGridItem extends StatelessWidget {
-  final Notice notice;
-
-  const NoticeGridItem({Key key, this.notice}) : super(key: key);
-
+class NoticeListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    final notice = Provider.of<Notice>(context, listen: false);
+    return InkWell(
+      highlightColor: notice.newspaperBase.actionColor,
+      hoverColor: notice.newspaperBase.actionColor,
+      splashColor: notice.newspaperBase.actionColor,
       onTap: () {
         Navigator.of(context).push(
           PageRouteBuilder(
@@ -22,42 +24,57 @@ class NoticeGridItem extends StatelessWidget {
           ),
         );
       },
-      child: Container(
-        child: GridTile(
-          footer: Container(
-            color: Colors.white70,
-            padding: const EdgeInsets.all(10),
-            child: Text(
-              '${notice.title}',
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.black87),
+      child: Consumer<Notice>(
+        builder: (context, notice, child) {
+          final data = Padding(
+            padding: const EdgeInsets.all(8),
+            child: ListTile(
+              trailing: Visibility(
+                visible: notice.html != null,
+                child: Icon(Icons.save, size: 12, color: Colors.grey),
+              ),
+              title: Text(notice.date,
+                  style: Theme.of(context)
+                      .textTheme
+                      .caption
+                      .copyWith(color: notice.imageUrl != null ? Colors.white : Colors.black54)),
+              subtitle: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    notice.title,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.black87, fontSize: 22),
+                  ),
+                  Visibility(
+                      visible: notice.summary != null,
+                      child: Markdown(
+                        data: html2md.convert(notice.summary),
+                        styleSheet: MarkdownStyleSheet(
+                            p: TextStyle(
+                          color: Colors.black54,
+                        )),
+                        physics: NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(4),
+                        shrinkWrap: true,
+                      ))
+                ],
+              ),
             ),
-          ),
-          child: notice.imageUrl == null
-              ? Container(
-                  color: Colors.black12,
-                  child: Image.asset(
-                    'assets/images/notice_placeholder.png',
-                  ))
-              : CachedNetworkImage(
-                  imageUrl: notice.imageUrl,
-                  placeholder: (_, __) => Container(
-                      color: Colors.black12,
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      )),
-                  errorWidget: (ctx, _, __) => Container(
-                      color: Colors.black12,
-                      child: Center(
-                        child: Icon(FontAwesomeIcons.solidNewspaper),
-                      )),
-                  fit: BoxFit.cover,
-                  height: double.infinity,
-                  width: double.infinity,
-                ),
-        ),
+          );
+          return notice.imageUrl == null || true
+              ? data
+              : Container(
+                  child: data,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                    colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.7), BlendMode.darken),
+                    image: CachedNetworkImageProvider(notice.imageUrl),
+                    fit: BoxFit.cover,
+                  )));
+        },
       ),
     );
   }
