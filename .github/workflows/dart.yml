@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ master, develop ]
+#    branches: [ master, develop ]
     tags:
     - 'v*'
 name: Build and Release apk
