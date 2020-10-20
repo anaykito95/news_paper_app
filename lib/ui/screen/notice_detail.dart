@@ -61,7 +61,7 @@ class _NoticeDetailState extends State<NoticeDetail> with TickerProviderStateMix
               context: context,
               builder: (context) => Container(
 //                height: 60,
-                color: Colors.white,
+//                color: Colors.white,
                 child: ChangeNotifierProvider.value(
                   value: notice,
                   child: Consumer<Notice>(
@@ -107,7 +107,7 @@ class _NoticeDetailState extends State<NoticeDetail> with TickerProviderStateMix
         iconTheme: IconThemeData(color: notice.newspaperBase.actionColor),
       ),
       body: Container(
-        color: Colors.white,
+//        color: Colors.white.withOpacity(0.4),
         child: notice.html != null
             ? ListView(
                 controller: _scrollController,
@@ -125,6 +125,9 @@ class _NoticeDetailState extends State<NoticeDetail> with TickerProviderStateMix
                     ),
                     subtitle: Markdown(
                       data: html2md.convert(notice.summary),
+                      styleSheet: MarkdownStyleSheet(
+                          p: Theme.of(context).textTheme.subtitle1
+                      ),
                       physics: NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.all(4),
                       shrinkWrap: true,
@@ -141,6 +144,9 @@ class _NoticeDetailState extends State<NoticeDetail> with TickerProviderStateMix
                       top: false,
                       child: Markdown(
                         data: html2md.convert(notice.html),
+                        styleSheet: MarkdownStyleSheet(
+                            p: Theme.of(context).textTheme.bodyText1
+                        ),
                         controller: _scrollController,
                         shrinkWrap: true,
                         imageBuilder: (uri, title, alt) {

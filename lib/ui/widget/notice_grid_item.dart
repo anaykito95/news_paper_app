@@ -12,9 +12,9 @@ class NoticeListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final notice = Provider.of<Notice>(context, listen: false);
     return InkWell(
-      highlightColor: notice.newspaperBase.actionColor,
-      hoverColor: notice.newspaperBase.actionColor,
-      splashColor: notice.newspaperBase.actionColor,
+      highlightColor: notice.newspaperBase.actionColor.withOpacity(0.3),
+      hoverColor: notice.newspaperBase.actionColor.withOpacity(0.3),
+      splashColor: notice.newspaperBase.actionColor.withOpacity(0.3),
       onTap: () {
         Navigator.of(context).push(
           PageRouteBuilder(
@@ -34,10 +34,8 @@ class NoticeListItem extends StatelessWidget {
                 child: Icon(Icons.save, size: 12, color: Colors.grey),
               ),
               title: Text(notice.date,
-                  style: Theme.of(context)
-                      .textTheme
-                      .caption
-                      .copyWith(color: notice.imageUrl != null ? Colors.white : Colors.black54)),
+                  style: Theme.of(context).textTheme.caption,
+              ),
               subtitle: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,16 +44,15 @@ class NoticeListItem extends StatelessWidget {
                     notice.title,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: Colors.black87, fontSize: 22),
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                   Visibility(
                       visible: notice.summary != null,
                       child: Markdown(
                         data: html2md.convert(notice.summary),
                         styleSheet: MarkdownStyleSheet(
-                            p: TextStyle(
-                          color: Colors.black54,
-                        )),
+                            p: Theme.of(context).textTheme.subtitle1
+                        ),
                         physics: NeverScrollableScrollPhysics(),
                         padding: const EdgeInsets.all(4),
                         shrinkWrap: true,
