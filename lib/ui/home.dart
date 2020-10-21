@@ -1,3 +1,4 @@
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:news_paper/ui/app_theme.dart';
 import 'package:news_paper/ui/page/newspaper_list.dart';
@@ -7,43 +8,36 @@ import 'package:provider/provider.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: MediaQuery.of(context).padding.copyWith(left: 0, right: 0, bottom: 0),
-      color: Colors.white,
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            'Periódicos de Cuba',
-            style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black87),
-          ),
-          actions: <Widget>[
-            Tooltip(
-              message: 'Información',
-              child: IconButton(
-                icon: Icon(Icons.info_outline),
-                color: Colors.black54,
-                onPressed: () => PackageInfo.fromPlatform().then((info) => showAboutDialog(
-                        context: context,
-                        applicationIcon: CircleAvatar(
-                          backgroundImage: AssetImage('assets/icon/icon.png'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Periódicos de Cuba', style: Theme.of(context).textTheme.headline6,),
+        actions: <Widget>[
+          EasyDynamicThemeBtn(),
+          Tooltip(
+            message: 'Información',
+            child: IconButton(
+              icon: Icon(Icons.info_outline, color: Theme.of(context).textTheme.button.color,),
+              onPressed: () => PackageInfo.fromPlatform().then((info) => showAboutDialog(
+                      context: context,
+                      applicationIcon: CircleAvatar(
+                        backgroundImage: AssetImage('assets/icon/icon.png'),
+                      ),
+                      children: [
+                        ListTile(
+                          title: Text('Desarrollador'),
+                          subtitle: Text('Ing. Andrés Forns Jusino'),
                         ),
-                        children: [
-                          ListTile(
-                            title: Text('Desarrollador'),
-                            subtitle: Text('Ing. Andrés Forns Jusino'),
-                          ),
-                          ListTile(
-                            title: Text('Version'),
-                            subtitle: Text('${info.version}.${info.buildNumber}'),
-                          )
-                        ])),
-              ),
-            )
-          ],
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.white),
-        ),
+                        ListTile(
+                          title: Text('Version'),
+                          subtitle: Text('${info.version}.${info.buildNumber}'),
+                        )
+                      ])),
+            ),
+          )
+        ],
+//        backgroundColor: Colors.white,
+//        iconTheme: IconThemeData(color: Colors.white),
+      ),
 //        drawer: Drawer(),
 //        bottomNavigationBar: BottomAppBar(
 ////        color: Colors.black26,
@@ -65,11 +59,10 @@ class Home extends StatelessWidget {
 //            ),
 //          ),
 //        ),
-        body: Column(
-          children: <Widget>[
-            Expanded(child: Container(child: NewsPaperList())),
-          ],
-        ),
+      body: Column(
+        children: <Widget>[
+          Expanded(child: Container(child: NewsPaperList())),
+        ],
       ),
     );
   }

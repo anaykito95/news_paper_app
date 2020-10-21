@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ master, develop ]
+#    branches: [ master, develop ]
     tags:
     - 'v*'
 name: Build and Release apk
@@ -16,7 +16,9 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: "stable"
+          flutter-version: '1.22.2'
       - run: flutter pub get
+      - run: flutter clean
       - run: flutter build apk --release --split-per-abi
       - name: Create a Release APK
         uses: ncipollo/release-action@v1

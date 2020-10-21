@@ -1,3 +1,4 @@
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -64,6 +65,9 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
                         ),
                     separatorBuilder: (context, index) => Divider(
                           thickness: 0.8,
+                          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                              ? Colors.white54
+                              : Colors.black54,
                           indent: 10,
                           endIndent: 10,
                         ),
@@ -74,10 +78,10 @@ class _NewspaperDetailState extends State<NewspaperDetail> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text('Sin noticias que mostrar'),
-                        FloatingActionButton(
-                          onPressed: () => notices.synchronize(force: true),
-                          child: Icon(FontAwesomeIcons.newspaper),
-                        )
+//                        FloatingActionButton(
+//                          onPressed: () => notices.synchronize(force: true),
+//                          child: Icon(FontAwesomeIcons.newspaper),
+//                        )
                       ],
                     ),
                   ),

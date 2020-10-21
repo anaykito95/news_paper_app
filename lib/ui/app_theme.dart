@@ -36,8 +36,14 @@ class AppTheme {
     iconTheme: IconThemeData(
       color: Colors.black87,
     ),
-    primaryTextTheme: Typography.material2018().black,
-    textTheme: Typography.material2018().black,
+    textTheme: new TextTheme(
+      headline4: TextStyle(color: Colors.black87),
+      headline6: TextStyle(color: Colors.black87),
+      button: TextStyle(color: Colors.black54),
+      caption: TextStyle(color: Colors.black54),
+      subtitle1: TextStyle(color: Colors.black54),
+      bodyText1: TextStyle(color: Colors.black54),
+    ),
   );
 
   static final ThemeData darkTheme = ThemeData(
@@ -46,9 +52,6 @@ class AppTheme {
     appBarTheme: AppBarTheme(
       color: Colors.black,
       elevation: 0,
-      iconTheme: IconThemeData(
-        color: Colors.white,
-      ),
     ),
     colorScheme: ColorScheme.light(
       primary: Colors.black,
@@ -62,7 +65,13 @@ class AppTheme {
     iconTheme: IconThemeData(
       color: Colors.white54,
     ),
-    primaryTextTheme: Typography.material2018().white,
-    textTheme: Typography.material2018().white,
+    textTheme: new TextTheme(
+      headline4: TextStyle(color: Colors.white70),
+      headline6: TextStyle(color: Colors.white70),
+      button: TextStyle(color: Colors.white60),
+      caption: TextStyle(color: Colors.white54),
+      subtitle1: TextStyle(color: Colors.white54),
+      bodyText1: TextStyle(color: Colors.white54),
+    ),
   );
 }
